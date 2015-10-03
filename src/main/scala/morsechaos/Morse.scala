@@ -1,0 +1,3 @@
+package morsechaos
+
+object Morse
