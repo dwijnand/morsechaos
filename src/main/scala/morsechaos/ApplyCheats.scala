@@ -7,15 +7,15 @@ object ApplyCheats {
   def main(args: Array[String]): Unit = {
     val text = Files.readAllLines(Paths.get("signs.clean.txt")).asScala.mkString
 
-    val str1 = "ENGLISH IS VERY"
-    val str1morse = str1.filter(_ != ' ').map(Letter.unsafe).flatMap(Morse.encodeLetter).map(_.ch).mkString
+    val str1 = "english is very"
+    val str1morse = str1.filter(_ != ' ').map(Morse.encode).mkString
     val len = str1morse.length
     val index = text.indexOfSlice(str1morse)
     require(text.indexOfSlice(str1morse, index + 1) == -1)
     val newText = text.slice(0, index) ++ s" $str1 " ++ text.slice(index + len, text.length)
 
-    val str2 = "DID NOT TRIED"
-    val str2morse = str2.filter(_ != ' ').map(Letter.unsafe).flatMap(Morse.encodeLetter).map(_.ch).mkString
+    val str2 = "did not tried"
+    val str2morse = str2.filter(_ != ' ').map(Morse.encode).mkString
     val len2 = str2morse.length
     val index2 = newText.indexOfSlice(str2morse)
     require(newText.indexOfSlice(str2morse, index2 + 1) == -1)
