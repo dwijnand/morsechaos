@@ -36,7 +36,7 @@ object CheckSolution {
 
   private def calcCksum(md: MessageDigest, bytes: Array[Byte]): String = { md update bytes ; hex(md.digest) }
 
-  def md5er    = MessageDigest getInstance "MD5"
+  def md5er = MessageDigest getInstance "MD5"
 
   /** Returns the hexadecimal string form of the specified byte array. */
   def hex(bytes: Array[Byte]) = bytes.map(b => "%02x" format b) mkString ""
