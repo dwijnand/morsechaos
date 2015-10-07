@@ -20,7 +20,7 @@ object WordSeg {
 
   val singleWordProb = OneGramDist(Paths get "data/count_1w.txt")
 
-  def wordSeqFitness(words: Seq[String]) = words.map(w => math.log10(singleWordProb(w))).sum
+  def wordSeqFitness(words: Seq[String]): Double = words.map(w => math.log10(singleWordProb(w))).sum
 }
 
 class OneGramDist(val dict: Map[String, Long], val gramCount: Long) {
@@ -28,7 +28,7 @@ class OneGramDist(val dict: Map[String, Long], val gramCount: Long) {
     if (dict contains word)
       dict(word).toDouble / gramCount
     else
-      1.0 / (gramCount * math.pow(10, word.length - 1))
+      1.0 / (gramCount * math.pow(10, word.length - 2))
 }
 
 object OneGramDist {
