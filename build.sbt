@@ -22,6 +22,7 @@ fork in run := true
 connectInput in run := true
 cancelable in Global := true
 
+mainClass in Compile := Some("morsechaos.MorseSeg")
 sources in (Compile, doc) := Nil
 publishArtifact in (Compile, packageDoc) := false
 
