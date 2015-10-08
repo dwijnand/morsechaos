@@ -6,6 +6,13 @@ import java.nio.file._
 object MorseSeg {
   def main(args: Array[String]): Unit = println(segmentDecode(args.head))
 
+  def segmentDecode(word: String) =
+    segment(word).map(w => singleWordProb.dict.get(w).map(_.maxBy(_._2)._1).getOrElse(w)) mkString " "
+
+  def segmentFromEnglish(word: String) =
+    segment(Morse encode word).map(w => singleWordProb.dict.get(w).map(_.maxBy(_._2)._1).getOrElse(w)) mkString " "
+
+
   def splitPairs(word: String): Seq[(String, String)] =
     0.until(word.length).map(i => word splitAt i + 1)
 
@@ -19,9 +26,6 @@ object MorseSeg {
   )
 
   val singleWordProb = OneGramMorseDist(Paths get "data/count_1w.morse.txt")
-
-  def segmentDecode(word: String) =
-    segment(word).map(w => singleWordProb.dict.get(w).map(_.maxBy(_._2)._1).getOrElse(w)) mkString " "
 
   def wordSeqFitness(words: Seq[String]): Double =
     words.map { w => math.log10(singleWordProb(w)) }.sum
