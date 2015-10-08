@@ -6,10 +6,8 @@ import java.nio.file._
 object MorseSeg {
   def main(args: Array[String]): Unit = println(segmentDecode(args.head))
 
-  def splitPairs(word: String): Seq[(String, String)] = {
-    println(s"Splitting word of ${word.length} characters")
+  def splitPairs(word: String): Seq[(String, String)] =
     0.until(word.length).map(i => word splitAt i + 1)
-  }
 
   val segment: Memo1[String, Seq[String]] = Memo1((word: String) =>
     if (word.isEmpty) Vector.empty
