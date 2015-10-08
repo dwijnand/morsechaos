@@ -36,14 +36,6 @@ class OneGramMorseDist(val dict: Map[String, Vector[(String, Long)]], val gramCo
     else
       probForUnknownWord(word)
 
-  // todo kill
-  def apply2(word: String): Vector[(Option[String], Double)] =
-    if (dict contains word) {
-      val dict1: Vector[(String, Long)] = dict(word)
-      dict1.map { case (w, prob) => (Some(w), prob.toDouble / gramCount) }
-    } else
-      Vector(None -> probForUnknownWord(word))
-
   private def probForUnknownWord(word: String): Double = {
     1.0 / (gramCount * math.pow(10, (word.length - 9) / 3))
   }
