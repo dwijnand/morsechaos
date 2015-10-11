@@ -28,7 +28,7 @@ class OneGramDist(val dict: Map[String, Long], val gramCount: Long) {
     if (dict contains word)
       dict(word).toDouble / gramCount
     else
-      1.0 / (gramCount * math.pow(10, word.length - 2))
+      1.0 / (gramCount * (if (word.length < 3) 1.0 else math.pow(10, 1.4 * (word.length - 3))))
 }
 
 object OneGramDist {
