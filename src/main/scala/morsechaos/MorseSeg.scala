@@ -38,10 +38,10 @@ class OneGramMorseDist(val dict: Map[String, Vector[(String, Long)]], val gramCo
     else
       probForUnknownWord(word)
 
-  private def probForUnknownWord(word: String): Double = {
-//    1.0 / (gramCount * math.pow(10, (word.length - 9).toDouble / 3))
-    0.0
-  }
+  private def probForUnknownWord(word: String): Double = 1.0 / gramCount * probForUnknownWordLen(word.length)
+
+  private def probForUnknownWordLen(l: Int): Double =
+    if (l < 3) 0.0 else if (l < 9) 1.0 else 1.0 / math.pow(10, 0.3 * (l - 9).toDouble)
 }
 
 object OneGramMorseDist {
