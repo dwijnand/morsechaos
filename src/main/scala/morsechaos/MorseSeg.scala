@@ -6,6 +6,11 @@ import java.nio.file._
 object MorseSeg {
   def main(args: Array[String]): Unit = segmentBoth(args.head)
 
+  def resegment(english: String, prev: String = "<S>") = {
+    val morse = Morse encode english.filter(_ != ' ').filter(_ != '\n')
+    segmentBoth(morse, prev)
+  }
+
   def segmentBoth(word: String, prev: String = "<S>") = {
     println(segment2Decode(word, prev))
     println(segmentDecode(word))
