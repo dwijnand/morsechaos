@@ -6,21 +6,16 @@ import java.nio.file._
 object MorseSeg {
   def main(args: Array[String]): Unit = println(segmentDecode(args.head))
 
-  def segmentDecode(word: String) =
-    segment(word).map(w => singleWordProb.dict.get(w).map(_.maxBy(_._2)._1).getOrElse(w)) mkString " "
+  def segmentDecode(word: String) = segment(word) map maxDecode mkString " "
 
-  def segmentFromEnglish(word: String) =
-    segment(Morse encode word).map(w => singleWordProb.dict.get(w).map(_.maxBy(_._2)._1).getOrElse(w)) mkString " "
+  def maxDecode(w: String) = singleWordProb.dict.get(w).map(_.maxBy(_._2)._1) getOrElse w
 
-
-  def splitPairs(word: String): Seq[(String, String)] =
-    0.until(word.length).map(i => word splitAt i + 1)
+  def splitPairs(word: String): Seq[(String, String)] = 0.until(word.length).map(i => word splitAt i + 1)
 
   val segment: Memo1[String, Seq[String]] = Memo1((word: String) =>
     if (word.isEmpty) Vector.empty
     else {
-      val allSegmentations =
-        splitPairs(word).map { case (first, rest) => Vector(first) ++ segment(rest) }
+      val allSegmentations = splitPairs(word).map { case (first, rest) => first +: segment(rest) }
       allSegmentations maxBy wordSeqFitness
     }
   )
