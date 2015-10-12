@@ -4,7 +4,12 @@ import scala.collection.JavaConverters._
 import java.nio.file._
 
 object MorseSeg {
-  def main(args: Array[String]): Unit = println(segmentDecode(args.head))
+  def main(args: Array[String]): Unit = segmentBoth(args.head)
+
+  def segmentBoth(word: String, prev: String = "<S>") = {
+    println(segment2Decode(word, prev))
+    println(segmentDecode(word))
+  }
 
   def segmentDecode(word: String) = segment(word) map maxDecode mkString " "
 
