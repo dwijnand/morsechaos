@@ -8,6 +8,9 @@ object MorseSeg {
 
   def segmentDecode(word: String) = segment(word) map maxDecode mkString " "
 
+  def segment2Decode(word: String): String = segment2Decode(word, "<S>")
+  def segment2Decode(word: String, prev: String) = segment2((word, prev, true))._2 map maxDecode mkString " "
+
   def maxDecode(w: String) = singleWordProb.dict.get(w).map(_.maxBy(_._2)._1) getOrElse w
 
   def splitPairs(word: String): Seq[(String, String)] = 0.until(word.length).map(i => word splitAt i + 1)
@@ -21,9 +24,61 @@ object MorseSeg {
   )
 
   val singleWordProb = OneGramMorseDist(Paths get "data/count_1w.morse.txt")
+  val twoWordProb = TwoGramMorseDict(Paths get "data/count_2w.morse.txt")
 
   def wordSeqFitness(words: Seq[String]): Double =
     words.map { w => math.log10(singleWordProb(w)) }.sum
+
+  def condProbOfWord(word: String, prev: String): Double = {
+    val prob2 = twoWordProb get s"$prev $word"
+    val probPrev = singleWordProb get prev
+//    println(s"Getting cond prob of [$word] with prev [$prev]")
+//    println(s"prob of [$prev $word]: $prob2")
+//    println(s"prob of prev [$prev]: $probPrev")
+    val ret = (prob2, probPrev) match {
+      case (Some(prob2), Some(probPrev)) => if (probPrev == 0.0) prob2 else prob2 / probPrev
+      case _                             => singleWordProb(word)
+    }
+//    println(s"Returning $ret")
+//    println()
+    ret
+  }
+
+  val segment2: Memo1[(String, String, Boolean), (Double, Seq[String])] = Memo1 { wordAndPrev: (String, String, Boolean) =>
+    val (word, prev, print) = wordAndPrev
+//    println(s"Segmenting [$word] with prev [$prev]")
+    if (word.isEmpty) {
+//      println(s"word is empty, returning (0.0 Vector.empty)")
+      (0.0, Vector.empty)
+    }
+    else {
+//      println(s"Splitting [$word] with prev [$prev]")
+      val candidates =
+        splitPairs(word).map { case (first, rem) =>
+//          println(s"Working on split [$first] + [$rem], with prev [$prev]")
+          val (probRem, rem2) = segment2((rem, first, false))
+//          println(s"Back from segmenting [$rem] with prev [$first], yields $probRem and $rem2")
+//          println(s"Note my prev is [$prev]")
+//          println(s"Calculating cond prob of [$first] with prev [$prev]")
+          val condProb = condProbOfWord(first, prev)
+//          println(s"Cond prob of [$first] with prev [$prev] is $condProb")
+          val condProbLogged = math.log10(condProb)
+//          println(s"which is $condProbLogged after log10")
+          val sumProb = condProbLogged + probRem
+          val candidate = first +: rem2
+//          println(s"which brings the sum prob of $candidate to $sumProb")
+//          println()
+          (sumProb, candidate)
+        }
+      if (print) {
+        val sorted = candidates.sortBy(-_._1)
+        println(s"Done segmenting [$word] with prev [$prev]")
+        println(s"${candidates.size} candidates:")
+        sorted foreach { case (prob, segs) => println(s"$prob ${segs map maxDecode mkString " "}") }
+      }
+      candidates.maxBy(_._1)
+    }
+  }
 }
 
 class OneGramMorseDist(val dict: Map[String, Vector[(String, Long)]], val gramCount: Long) {
