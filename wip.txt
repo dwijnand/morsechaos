@@ -1,6 +1,8 @@
 there are many possibilities to decode the slashes and dots and get this text
 
- the first method is to do it by hand it time grouping symbols and trying to get letters from that and then trying to form words with the letters
+ the first method is to do it by hand
+
+ i mean grouping symbols and trying to get letters from that and then trying to form words with the letters
 
  the main problem is that sometimes the same dashes and dots array can form different words
   and you can only get the right one trying all possibilities
@@ -14,9 +16,7 @@ there are many possibilities to decode the slashes and dots and get this text
 
  but the problem is that this is not the case
 
- the other way to solve this seem to wait computer program theories
-
- different combinations of letters
+ the other way to solve this seem to wait computer program theories different combinations of letters
 
  using a backtracking algorithm the program should be clever enough to avoid some wrong patterns for example if
   there are three dashes your program could think that there are built be there week that
