@@ -25,7 +25,7 @@
 
  this is wrong because in normal english it is very strange to find three letters t together
 
- this care of things reduces the number of combinations that there are still too many possibilities
+ this care of things reduces the number of combinations but there are still too many possibilities
 
  thus it is up to you
 
