@@ -1,4 +1,4 @@
-there are many possibilities to decode the slashes and dots and get this text
+ there are many possibilities to decode the slashes and dots and get this text
 
  the first method is to do it by hand
 
@@ -7,10 +7,9 @@ there are many possibilities to decode the slashes and dots and get this text
  the main problem is that sometimes the same dashes and dots array can form different words
   and you can only get the right one trying all possibilities
 
- in this handy way
+ in this handy way it may be useful that you look for some common words or expressions that you expect to find
 
- it may be useful that you look for some common words or expressions that you expect to find
-  such as solution congratulations or good job
+ such as solution congratulations or good job
 
  you can even have a lucky day if you find something like the solution is extrapolation
 
@@ -18,8 +17,9 @@ there are many possibilities to decode the slashes and dots and get this text
 
  the other way to solve this seem to wait computer program theories different combinations of letters
 
- using a backtracking algorithm the program should be clever enough to avoid some wrong patterns for example if
-  there are three dashes your program could think that there are built be there week that
+ using a backtracking algorithm the program should be clever enough to avoid some wrong patterns
+
+ for example if there are three dashes your program could think that there are built be there week that
 
  this is wrong because in normal english it is very
 
