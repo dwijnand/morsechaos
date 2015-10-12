@@ -7,15 +7,15 @@ import java.security.MessageDigest
 
 object CheckSolution {
   def main(args: Array[String]): Unit = {
-    val text = Files.readAllLines(Paths.get("signs.clean.txt")).asScala.mkString
+    val text = Files.readAllLines(Paths.get("wip.txt")).asScala.mkString
     val noSpaces = text.filter(_ != ' ')
     val allBytes = noSpaces.getBytes(StandardCharsets.UTF_8)
-    val bytesGroups = allBytes.grouped(512).toSeq
+    val bytesGroups: Seq[Seq[Byte]] = allBytes.grouped(512).map(_.toSeq).toSeq
 
-    val bytes1 = bytesGroups.applyOrElse(0, (_: Int) => Array.empty[Byte])
-    val bytes2 = bytesGroups.applyOrElse(1, (_: Int) => Array.empty[Byte])
-    val bytes3 = bytesGroups.applyOrElse(2, (_: Int) => Array.empty[Byte])
-    val bytes4 = bytesGroups.applyOrElse(3, (_: Int) => Array.empty[Byte])
+    val bytes1 = bytesGroups.applyOrElse(0, (_: Int) => Seq.empty[Byte])
+    val bytes2 = bytesGroups.applyOrElse(1, (_: Int) => Seq.empty[Byte])
+    val bytes3 = bytesGroups.applyOrElse(2, (_: Int) => Seq.empty[Byte])
+    val bytes4 = bytesGroups.applyOrElse(3, (_: Int) => Seq.empty[Byte])
 
     val incomingBytes1Md5 = calcMd5(bytes1)
     val incomingBytes2Md5 = calcMd5(bytes2)
@@ -32,9 +32,9 @@ object CheckSolution {
     ()
   }
 
-  def calcMd5(bytes: Array[Byte]): String = calcCksum(md5er, bytes)
+  def calcMd5(bytes: Seq[Byte]): String = calcCksum(md5er, bytes)
 
-  private def calcCksum(md: MessageDigest, bytes: Array[Byte]): String = { md update bytes ; hex(md.digest) }
+  private def calcCksum(md: MessageDigest, bytes: Seq[Byte]): String = { md update bytes.toArray ; hex(md.digest) }
 
   def md5er = MessageDigest getInstance "MD5"
 
