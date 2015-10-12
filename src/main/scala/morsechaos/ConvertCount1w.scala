@@ -10,7 +10,7 @@ object ConvertCount1w {
     val split1 = lines1.map { l => val sp = l split '\t'; sp(0) -> sp(1).toLong }
     val split2 = split1.map { case (word, count) => word.toLowerCase -> count }
     val split3 = distinctBy(split2, (t: (String, Long)) => t._1)
-    val split4 = split3.filter { case (word, _) => !Set("i", "a").contains(word) && word.length > 1 }
+    val split4 = split3.filter { case (word, _) => Set("i", "a").contains(word) || word.length > 1 }
     val split5 = split4.filter { case (word, _) => word.forall(ch => Morse.charToMorse.keySet.contains(ch)) }
     val split6 = split5.map { case (word, count) => (word.flatMap(Morse.encode(_)), word, count) }
     Files.write(Paths get "data/count_1w.morse.txt",
