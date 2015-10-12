@@ -35,11 +35,11 @@
 
  this join all later valid if this can save a plateau the value of one and there at it adds value of twenty six
 
- after saying this i think it must keep writing a bit to make people think that this text is too long to solve
+ after saying this i think it must keep writing a bit
 
- by such mt
+ to make people think that this text is too long to solve by hand
 
- i will tell you how i solved contact
+ so i will tell you how i solved contact
 
  at first i thought it was binary encoded
 
@@ -49,7 +49,7 @@
 
  rates are spiral circles write every direction that
 
- nothing worked so i detailed that it was not binary
+ nothing worked so i decided that it was not binary
 
  after analyzing other challenges from the same author i noticed that they are always easy methods of encoding
 
