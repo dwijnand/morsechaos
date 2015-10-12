@@ -55,3 +55,15 @@ object OneGramMorseDist {
     new OneGramMorseDist(dict, gramCount)
   }
 }
+
+object TwoGramMorseDict {
+  def apply(p: Path) = {
+    val lines = Files.readAllLines(p).asScala
+    val dict = lines
+      .map { l => val sp = l split ' '; (s"${sp(0)} ${sp(1)}", s"${sp(2)} ${sp(3)}", sp(4).toLong) }
+      .groupBy(_._1)
+      .map { case (morse, values) => morse -> values.map { case (_, word, count) => (word, count) }.toVector }
+    val gramCount = dict.values.flatMap(_.map(_._2)).sum
+    new OneGramMorseDist(dict, gramCount)
+  }
+}
