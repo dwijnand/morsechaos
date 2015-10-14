@@ -26,6 +26,9 @@ object MorseSeg {
 
   def splitPairs(word: String): Seq[(String, String)] = 0.until(word.length).map(i => word splitAt i + 1)
 
+  val singleWordProb = OneGramMorseDist(Paths get "data/count_1w.morse.txt")
+  val twoWordProb = TwoGramMorseDict(Paths get "data/count_2w.morse.txt")
+
   val segment: Memo1[String, Seq[String]] = Memo1((word: String) =>
     if (word.isEmpty) Vector.empty
     else {
@@ -34,8 +37,17 @@ object MorseSeg {
     }
   )
 
-  val singleWordProb = OneGramMorseDist(Paths get "data/count_1w.morse.txt")
-  val twoWordProb = TwoGramMorseDict(Paths get "data/count_2w.morse.txt")
+  val segmentAll: Memo1[String, Seq[(Vector[String], Double)]] = Memo1((word: String) =>
+    if (word.isEmpty) Vector((Vector.empty, 0.0))
+    else
+      splitPairs(word).flatMap { case (first, rest) =>
+        singleWordProb.getAll(first)
+          .map { case (w, p) => w -> log10(p) }
+          .flatMap { case (w, p) =>
+            segmentAll(rest) map { case (ws, ps) => (w +: ws) -> (p + ps) }
+          }
+      }.sortBy(_._2).takeRight(30)
+  )
 
   def wordSeqFitness(words: Seq[String]): Double =
     words.map { w => log10(singleWordProb(w)) }.sum
