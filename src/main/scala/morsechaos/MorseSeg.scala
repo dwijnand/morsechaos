@@ -7,10 +7,13 @@ import java.nio.file._
 object MorseSeg {
   def main(args: Array[String]): Unit = segmentBoth(args.head)
 
-  def resegment(english: String, prev: String = "<S>") = {
-    val morse = Morse encode english.filter(_ != ' ').filter(_ != '\n')
-    segmentBoth(morse, prev)
-  }
+  def encode(english: String) = Morse encode english.filter(_ != ' ').filter(_ != '\n')
+
+  def resegmentAll(english: String) = segmentAllDecode(encode(english))
+
+  def resegment(english: String, prev: String = "<S>") = segmentBoth(encode(english), prev)
+
+  def segmentAllDecode(word: String) = segmentAll(word) foreach { case (ws, _) => println(ws mkString " ") }
 
   def segmentBoth(word: String, prev: String = "<S>") = {
     println(segment2Decode(word, prev))
