@@ -76,7 +76,11 @@ object MorseSeg {
 }
 
 class OneGramMorseDist(val dict: Map[String, Vector[(String, Long)]], val gramCount: Long) {
-  def get(word: String): Option[Double] = dict.get(word).map(_.map(_._2).max.toDouble / gramCount)
+  def getAll(word: String): Vector[(String, Double)] =
+    dict.getOrElse(word, Vector.empty) map { case (w, p) => w -> p.toDouble / gramCount }
+
+  def get(word: String): Option[Double] =
+    getAll(word) match { case Vector() => None ; case xs => Some(xs.map(_._2).max) }
 
   def apply(word: String): Double = get(word) getOrElse probForUnknownWord(word)
 
