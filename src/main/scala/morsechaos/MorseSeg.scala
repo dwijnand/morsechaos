@@ -1,6 +1,7 @@
 package morsechaos
 
 import scala.collection.JavaConverters._
+import scala.math._
 import java.nio.file._
 
 object MorseSeg {
@@ -37,7 +38,7 @@ object MorseSeg {
   val twoWordProb = TwoGramMorseDict(Paths get "data/count_2w.morse.txt")
 
   def wordSeqFitness(words: Seq[String]): Double =
-    words.map { w => math.log10(singleWordProb(w)) }.sum
+    words.map { w => log10(singleWordProb(w)) }.sum
 
   def condProbOfWord(word: String, prev: String): Double = {
     val prob2 = twoWordProb get s"$prev $word"
@@ -59,7 +60,7 @@ object MorseSeg {
         splitPairs(word).map { case (first, rem) =>
           val (probRem, rem2) = segment2((rem, first, false))
           val condProb = condProbOfWord(first, prev)
-          val condProbLogged = math.log10(condProb)
+          val condProbLogged = log10(condProb)
           val sumProb = condProbLogged + probRem
           val candidate = first +: rem2
           (sumProb, candidate)
