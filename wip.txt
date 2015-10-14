@@ -33,11 +33,12 @@
 
  and you can solve this automatically
 
- and now what you are looking for is the number of letters multiplied by
-
- the ii join all later values in this can save a at fewer a the value of one and there at it adds value of
-
- twenty six
+ and now what you are looking for is
+ the number of letters
+ multiplied by
+ the sum of all letter values in this text
+ having letter a the value of one
+ and the letter z the value of twenty six
 
 
 
