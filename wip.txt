@@ -1,4 +1,4 @@
- there are many possibilities to decode this dashes and dots and get this text
+ there are many possibilities to decode these dashes and dots and get this text
 
  the first method is to do it by hand
 
@@ -16,7 +16,7 @@
 
  but the problem is that this is not the case
 
- the other way to solve this is to make a computer program theories different combinations of letters using a
+ the other way to solve this is to make a computer program that tries different combinations of letters using a
   backtracking algorithm
 
  the program should be clever enough to avoid some wrong patterns
@@ -25,11 +25,9 @@
 
  this is wrong because in normal english it is very strange to find three letters t together
 
- this care of things reduces the number of combinations but there are still too many possibilities
+ these kind of things reduces the number of combinations but there are still too many possibilities
 
- thus it is up to you
-
- work plus an loved an lost mecca grams frequencies
+ thus it is up to you work with digrams trigrams or tetra grams frequencies
 
  and you can solve this automatically
 
