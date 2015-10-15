@@ -6,36 +6,40 @@ import java.nio.file._
 import java.security.MessageDigest
 
 object CheckSolution {
+  val expectedMd5_1 = "2d9ce6581ebe66d83053b696ef91aea2"
+  val expectedMd5_2 = "cc848bf37c77a3c6283bbc6c1ffc086b"
+  val expectedMd5_3 = "c5e27d798bdc03c71e9c5362ba239783"
+  val expectedMd5_4 = "693ab2655d16e06d29fef3240c745bd0"
+
   def main(args: Array[String]): Unit = {
     val text = Files.readAllLines(Paths.get("wip.txt")).asScala.mkString
     val noSpaces = text.filter(_ != ' ')
-    val allBytes = noSpaces.getBytes(StandardCharsets.UTF_8)
-    val bytesGroups: Seq[Seq[Byte]] = allBytes.grouped(512).map(_.toSeq).toSeq
+    val groups = noSpaces.grouped(512).toSeq
+    val chunk1 = groups.applyOrElse(0, (_: Int) => "")
+    val chunk2 = groups.applyOrElse(1, (_: Int) => "")
+    val chunk3 = groups.applyOrElse(2, (_: Int) => "")
+    val chunk4 = groups.applyOrElse(3, (_: Int) => "")
 
-    val bytes1 = bytesGroups.applyOrElse(0, (_: Int) => Seq.empty[Byte])
-    val bytes2 = bytesGroups.applyOrElse(1, (_: Int) => Seq.empty[Byte])
-    val bytes3 = bytesGroups.applyOrElse(2, (_: Int) => Seq.empty[Byte])
-    val bytes4 = bytesGroups.applyOrElse(3, (_: Int) => Seq.empty[Byte])
-
-    val incomingBytes1Md5 = calcMd5(bytes1)
-    val incomingBytes2Md5 = calcMd5(bytes2)
-    val incomingBytes3Md5 = calcMd5(bytes3)
-    val incomingBytes4Md5 = calcMd5(bytes4)
-
-    def requireIf(b: Boolean, msg: => String) = if (!b) println(msg)
-
-    def assertMd5(incoming: String, expected: String, n: Int) =
-      if (incoming == expected)
-        println(s"MD5 MATCH!!! for bytes$n: $incoming == $expected")
-      else
-        println(s"MD5 mismatch for bytes$n: $incoming != $expected")
-
-    assertMd5(incomingBytes1Md5, "2d9ce6581ebe66d83053b696ef91aea2", 1)
-    assertMd5(incomingBytes2Md5, "cc848bf37c77a3c6283bbc6c1ffc086b", 2)
-    assertMd5(incomingBytes3Md5, "c5e27d798bdc03c71e9c5362ba239783", 3)
-    assertMd5(incomingBytes4Md5, "693ab2655d16e06d29fef3240c745bd0", 4)
+    testChunk(chunk1, expectedMd5_1, 1)
+    testChunk(chunk2, expectedMd5_2, 2)
+    testChunk(chunk3, expectedMd5_3, 3)
+    testChunk(chunk4, expectedMd5_4, 4)
     ()
   }
+
+  def testChunk(text: String, expectedMd5: String, n: Int) = {
+    println(s"text $n: $text")
+    val bytes = text.getBytes(StandardCharsets.UTF_8)
+    assert(bytes.length == text.length)
+    assertMd5(calcMd5(bytes), expectedMd5, 1)
+    println()
+  }
+
+  def assertMd5(incoming: String, expected: String, n: Int) =
+    if (incoming == expected)
+      println(s"MD5 MATCH!!! for bytes$n: $incoming == $expected")
+    else
+      println(s"MD5 mismatch for bytes$n: $incoming != $expected")
 
   def calcMd5(bytes: Seq[Byte]): String = calcCksum(md5er, bytes)
 
