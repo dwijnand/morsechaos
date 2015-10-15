@@ -7,7 +7,12 @@ import java.nio.file._
 object MorseSeg {
   def main(args: Array[String]): Unit = segmentBoth(args.head)
 
-  def encode(english: String) = Morse encode english.filter(_ != ' ').filter(_ != '\n')
+  def encode(english: String) =
+    english.filter(_ != ' ').filter(_ != '\n') flatMap {
+      case '.' => "."
+      case '-' => "-"
+      case ch  => Morse encode ch
+    }
 
   def resegmentAll(english: String) = segmentAllDecode(encode(english))
 
