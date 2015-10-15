@@ -25,7 +25,10 @@ object CheckSolution {
     def requireIf(b: Boolean, msg: => String) = if (!b) println(msg)
 
     def assertMd5(incoming: String, expected: String, n: Int) =
-      requireIf(incoming == expected, s"MD5 mismatch for bytes$n: $incoming != $expected")
+      if (incoming == expected)
+        println(s"MD5 MATCH!!! for bytes$n: $incoming == $expected")
+      else
+        println(s"MD5 mismatch for bytes$n: $incoming != $expected")
 
     assertMd5(incomingBytes1Md5, "2d9ce6581ebe66d83053b696ef91aea2", 1)
     assertMd5(incomingBytes2Md5, "cc848bf37c77a3c6283bbc6c1ffc086b", 2)

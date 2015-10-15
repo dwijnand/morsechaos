@@ -2,7 +2,7 @@
 
  the first method is to do it by hand
 
- i mean grouping symbols and trying to get letters from that and then trying to form words with the letters
+ i mean grouping symbols and trying to get letters from them and then trying to form words with the letters
 
  the main problem is that sometimes the same dashes and dots array can form different words
 
