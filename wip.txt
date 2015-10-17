@@ -1,20 +1,12 @@
  there are many possibilities to decode these dashes and dots and get this text
-
  the first method is to do it by hand
-
  i mean grouping symbols and trying to get letters from them and then trying to form words with the letters
-
  the main problem is that sometimes the same dashes and dots array can form different words
-
  and you can only get the right one trying all possibilities
-
- in this handy way
-
- it may be useful that you look for some common words or expressions that you expect to find
-
+ in this handy way it may be useful that you look for some common words or expressions that you expect to find
  such as solution congratulations or good job
-
  you can even have a lucky day if you find something like the solution is extrapolation
+
 
  but the problem is that this is not the case
 
