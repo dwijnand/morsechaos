@@ -45,6 +45,9 @@ object MorseSeg {
     }
   )
 
+  def wordSeqFitness(words: Seq[String]): Double =
+    words.map { w => log10(singleWordProb(w)) }.sum
+
   val segmentAll: Memo1[String, Seq[(Vector[String], Double)]] = Memo1((word: String) =>
     if (word.isEmpty) Vector((Vector.empty, 0.0))
     else
@@ -57,9 +60,6 @@ object MorseSeg {
       }.sortBy(_._2).takeRight(30)
   )
 
-  def wordSeqFitness(words: Seq[String]): Double =
-    words.map { w => log10(singleWordProb(w)) }.sum
-
   def condProbOfWord(word: String, prev: String): Double = {
     val prob2 = twoWordProb get s"$prev $word"
     val probPrev = singleWordProb get prev
@@ -70,20 +70,30 @@ object MorseSeg {
     ret
   }
 
+  def condProbOfWordAll(word: String, prev: String): Vector[(String, Double)] = {
+    val probs = twoWordProb getAll s"$prev $word"
+    val probsPrev = singleWordProb getAll prev
+    val ret = (probs, probsPrev) match {
+      case (Vector(), Vector()) => singleWordProb getAll word
+      case (probs, probsPrev)    =>
+        for {
+          (_, probPrev) <- probsPrev
+          (english, prob) <- probs
+        } yield if (probPrev == 0.0) (english, prob) else (english, prob / probPrev)
+    }
+    ret
+  }
+
   val segment2: Memo1[(String, String, Boolean), (Double, Seq[String])] = Memo1 { wordAndPrev: (String, String, Boolean) =>
     val (word, prev, print) = wordAndPrev
     if (word.isEmpty) {
       (0.0, Vector.empty)
-    }
-    else {
+    } else {
       val candidates =
         splitPairs(word).map { case (first, rem) =>
+          val condProb = log10(condProbOfWord(first, prev))
           val (probRem, rem2) = segment2((rem, first, false))
-          val condProb = condProbOfWord(first, prev)
-          val condProbLogged = log10(condProb)
-          val sumProb = condProbLogged + probRem
-          val candidate = first +: rem2
-          (sumProb, candidate)
+          (condProb + probRem, first +: rem2)
         }
       if (print) {
         val sorted = candidates.sortBy(-_._1)
