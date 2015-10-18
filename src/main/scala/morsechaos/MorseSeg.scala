@@ -14,11 +14,16 @@ object MorseSeg {
       case ch  => Morse encode ch
     }
 
+  def resegment2All(english: String) = segment2AllDecode(encode(english))
+
   def resegmentAll(english: String) = segmentAllDecode(encode(english))
 
   def resegment(english: String, prev: String = "<S>") = segmentBoth(encode(english), prev)
 
   def segmentAllDecode(word: String) = segmentAll(word) foreach { case (ws, _) => println(ws mkString " ") }
+
+  def segment2AllDecode(word: String, prev: String = "<S>") =
+    segment2All((word, prev)) foreach { case (_, ws) => println(ws mkString " ") }
 
   def segmentBoth(word: String, prev: String = "<S>") = {
     println(segment2Decode(word, prev))
@@ -102,6 +107,21 @@ object MorseSeg {
         sorted foreach { case (prob, segs) => println(s"$prob ${segs map maxDecode mkString " "}") }
       }
       candidates.maxBy(_._1)
+    }
+  }
+
+  val segment2All: Memo1[(String, String), Seq[(Double, Seq[String])]] = Memo1 { wordAndPrev: (String, String) =>
+    val (word, prev) = wordAndPrev
+    if (word.isEmpty) {
+      Vector((0.0, Vector.empty))
+    } else {
+      (for {
+        (first, rem) <- splitPairs(word)
+        (probRem, rem2) <- segment2All((rem, first))
+        (first2, prob) <- condProbOfWordAll(first, prev).map { case (eng, prob) => (eng, log10(prob)) }
+      } yield
+        (prob + probRem, first2 +: rem2)
+      ).sortBy(_._1).takeRight(30)
     }
   }
 }
