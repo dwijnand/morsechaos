@@ -36,7 +36,7 @@ object CheckSolution {
 
   def assertMd5(incoming: String, expected: String, n: Int) =
     if (incoming == expected)
-      println(s"MD5 MATCH!!! for bytes$n: $incoming == $expected")
+      println(s"MD5 MATCH!!! for bytes$n: incoming: $incoming == expected: $expected")
     else
-      println(s"MD5 mismatch for bytes$n: $incoming != $expected")
+      println(s"MD5 mismatch for bytes$n: incoming: $incoming != expected: $expected")
 }
