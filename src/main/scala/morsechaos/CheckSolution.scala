@@ -3,7 +3,6 @@ package morsechaos
 import scala.collection.JavaConverters._
 import java.nio.charset.StandardCharsets
 import java.nio.file._
-import java.security.MessageDigest
 
 object CheckSolution {
   val expectedMd5_1 = "2d9ce6581ebe66d83053b696ef91aea2"
@@ -31,7 +30,7 @@ object CheckSolution {
     println(s"text $n: $text")
     val bytes = text.getBytes(StandardCharsets.UTF_8)
     assert(bytes.length == text.length)
-    assertMd5(calcMd5(bytes), expectedMd5, 1)
+    assertMd5(Md5(bytes), expectedMd5, 1)
     println()
   }
 
@@ -40,13 +39,4 @@ object CheckSolution {
       println(s"MD5 MATCH!!! for bytes$n: $incoming == $expected")
     else
       println(s"MD5 mismatch for bytes$n: $incoming != $expected")
-
-  def calcMd5(bytes: Seq[Byte]): String = calcCksum(md5er, bytes)
-
-  private def calcCksum(md: MessageDigest, bytes: Seq[Byte]): String = { md update bytes.toArray ; hex(md.digest) }
-
-  def md5er = MessageDigest getInstance "MD5"
-
-  /** Returns the hexadecimal string form of the specified byte array. */
-  def hex(bytes: Array[Byte]) = bytes.map(b => f"$b%02x") mkString ""
 }
