@@ -22,7 +22,7 @@
 
  for example if there are three dashes your program could think that there are three times the letter t
 
- but this is wrong because in normal english it is very strange to find three letters t together
+ but this is wrong because in normal english is very strange to find three letters t together
 
  these kind of things reduces the number of combinations but there are still too many possibilities
 
@@ -55,7 +55,7 @@
 
  from the same author i noticed that they are always easy methods of encoding
 
- so i did not try complex operations and things like that
+ so i did not tried complex operations and things like that
 
  well i think it is enough for the moment
 
