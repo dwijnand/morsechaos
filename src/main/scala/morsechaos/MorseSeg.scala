@@ -40,13 +40,13 @@ object MorseSeg {
   def splitDecode(morse: String): Seq[String] = {
     if (morse.length == 0) Vector("")
     else {
-      (1 to (4 min morse.length)).toVector flatMap { i =>
+      (1 to (4 min morse.length)).iterator.flatMap { i =>
         val (l, r) = morse splitAt i
         Morse decodeOpt l match {
           case Some(ch) => splitDecode(r) map (s => ch.toString + s)
           case None     => Vector.empty
         }
-      }
+      }.toVector
     }
   }
 
