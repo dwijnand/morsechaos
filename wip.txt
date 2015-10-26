@@ -1,64 +1,40 @@
  there are many possibilities to decode these dashes and dots and get this text
-
  the first method is to do it by hand
-
  i mean grouping symbols and trying to get letters from them and then trying to form words with the letters
-
  the main problem is that sometimes the same dashes and dots array can form different words
  and you can only get the right one trying all possibilities
-
  in this handy way it may be useful that you look for some common words or expressions that you expect to find
-
  such as solution congratulations or good job
-
  you can even have a lucky day if you find something like the solution is extrapolation but the
 
 
  problem is that this is not the case
-
  the other way to solve this
  is to make a computer program that tries different combinations of letters using a backtracking algorithm
  the program should be clever enough to avoid some wrong patterns
-
  for example if there are three dashes your program could think that there are three times the letter t
-
  but this is wrong because in normal english is very strange to find three letters t together
-
  these kind of things reduces the number of combinations but there are still too many possibilities
-
  thus it is up to you work with di grams trigrams or tetra grams frequencies and you can solve this
 
 
  automatically
-
  and now what you are looking for is the number of letters multiplied by
  the sum of all letter values in this text
  having letter a the value of one and the letter z the value of twenty six
-
  after saying this i think it must keep writing a bit
  to make people think that this text is too long to solve by hand
-
  so i will tell you how i solved contact
-
  at first i thought it was binary encoded
-
  it is easy to think that each don sight
-
  and if you find the method of reading you have in a line too many ways
-
  rates are spiral circles write every direction
-
  but nothing worked so i decided that it was not binary
-
  after analyzing other challenges
 
 
  from the same author i noticed that they are always easy methods of encoding
-
  so i did not tried complex operations and things like that
-
  well i think it is enough for the moment
-
  if you read this you can ask me how the story continues
-
  i hope you enjoyed this challenge
