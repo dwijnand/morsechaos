@@ -37,6 +37,19 @@ object MorseSeg {
 
   def maxDecode(w: String) = singleWordProb.dict.get(w).map(_.maxBy(_._2)._1) getOrElse w
 
+  def splitDecode(morse: String): Seq[String] = {
+    if (morse.length == 0) Vector("")
+    else {
+      (1 to (4 min morse.length)).toVector flatMap { i =>
+        val (l, r) = morse splitAt i
+        Morse decodeOpt l match {
+          case Some(ch) => splitDecode(r) map (s => ch.toString + s)
+          case None     => Vector.empty
+        }
+      }
+    }
+  }
+
   def splitPairs(word: String): Seq[(String, String)] = 0.until(word.length).map(i => word splitAt i + 1)
 
   val singleWordProb = OneGramMorseDist(Paths get "data/count_1w.morse.txt")
