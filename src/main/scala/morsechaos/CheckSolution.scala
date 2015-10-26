@@ -30,7 +30,7 @@ object CheckSolution {
     println(s"text $n: $text")
     val bytes = text.getBytes(StandardCharsets.UTF_8)
     assert(bytes.length == text.length)
-    assertMd5(Md5(bytes), expectedMd5, 1)
+    assertMd5(Md5(bytes), expectedMd5, n)
     println()
   }
 
