@@ -13,11 +13,17 @@ object CheckSolution {
   def main(args: Array[String]): Unit = {
     val text = Files.readAllLines(Paths.get("wip.txt")).asScala.mkString
     val noSpaces = text.filter(_ != ' ')
-    val groups = noSpaces.grouped(512).toSeq
-    val chunk1 = groups.applyOrElse(0, (_: Int) => "")
-    val chunk2 = groups.applyOrElse(1, (_: Int) => "")
-    val chunk3 = groups.applyOrElse(2, (_: Int) => "")
-    val chunk4 = groups.applyOrElse(3, (_: Int) => "")
+
+ // val groups = noSpaces.grouped(512).toSeq
+ // val chunk1 = groups.applyOrElse(0, (_: Int) => "")
+ // val chunk2 = groups.applyOrElse(1, (_: Int) => "")
+ // val chunk3 = groups.applyOrElse(2, (_: Int) => "")
+ // val chunk4 = groups.applyOrElse(3, (_: Int) => "")
+
+    val (chunk1, rem1) = noSpaces splitAt 512
+    val (rem2, chunk4) = rem1 splitAt rem1.length - 221
+    val chunk2 = rem2 take 512
+    val chunk3 = rem2 takeRight 512
 
     testChunk(chunk1, expectedMd5_1, 1)
     testChunk(chunk2, expectedMd5_2, 2)
