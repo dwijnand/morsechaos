@@ -40,9 +40,12 @@ object CheckSolution {
     println()
   }
 
+  val grnCheckMark = scala.io.AnsiColor.GREEN + "\u2713" + scala.io.AnsiColor.RESET
+  val redCrossMark = scala.io.AnsiColor.RED   + "\u2717" + scala.io.AnsiColor.RESET
+
   def assertMd5(incoming: String, expected: String, n: Int) =
     if (incoming == expected)
-      println(s"MD5 MATCH!!! for bytes$n: incoming: $incoming == expected: $expected")
+      println(s"MD5 MATCH!!! $grnCheckMark for bytes$n: incoming: $incoming == expected: $expected")
     else
-      println(s"MD5 mismatch for bytes$n: incoming: $incoming != expected: $expected")
+      println(s"MD5 mismatch $redCrossMark for bytes$n: incoming: $incoming != expected: $expected")
 }
