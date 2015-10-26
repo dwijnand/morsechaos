@@ -48,5 +48,5 @@ object CheckSolution {
   def md5er = MessageDigest getInstance "MD5"
 
   /** Returns the hexadecimal string form of the specified byte array. */
-  def hex(bytes: Array[Byte]) = bytes.map(b => "%02x" format b) mkString ""
+  def hex(bytes: Array[Byte]) = bytes.map(b => f"$b%02x") mkString ""
 }
