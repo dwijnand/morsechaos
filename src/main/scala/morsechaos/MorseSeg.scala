@@ -8,7 +8,7 @@ object MorseSeg {
   def main(args: Array[String]): Unit = segmentBoth(args.head)
 
   def encode(english: String) =
-    english.filter(_ != ' ').filter(_ != '\n') flatMap {
+    english filter (_ != ' ') filter (_ != '\n') flatMap {
       case '.' => "."
       case '-' => "-"
       case ch  => Morse encode ch
@@ -36,6 +36,26 @@ object MorseSeg {
   def segment2Decode(word: String, prev: String) = segment2((word, prev, true))._2 map maxDecode mkString " "
 
   def maxDecode(w: String) = singleWordProb.dict.get(w).map(_.maxBy(_._2)._1) getOrElse w
+
+  def resplit(english: String, leeway: Int = 0): Iterator[String] = {
+    val len = english filter (_ != ' ') filter (_ != '\n') length
+    val range = len - leeway max 1 to len + leeway
+
+    def loop(morse: String, len: Int): Iterator[String] = {
+      if (morse.length == 0) if (range contains len) Iterator("") else Iterator.empty
+      else {
+        (1 to (4 min morse.length)).iterator flatMap { i =>
+          val (l, r) = morse splitAt i
+          Morse decodeOpt l match {
+            case Some(ch) => loop(r, len + 1) map (s => ch.toString + s)
+            case None     => Vector.empty
+          }
+        }
+      }
+    }
+
+    loop(encode(english), 0)
+  }
 
   def splitDecode(morse: String): Iterator[String] = {
     if (morse.length == 0) Iterator("")
