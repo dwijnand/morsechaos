@@ -14,7 +14,7 @@ scalacOptions  += "-language:implicitConversions"
 scalacOptions  += "-language:postfixOps"
 scalacOptions  += "-Xfuture"
 
-libraryDependencies += "jline" % "jline" % "2.13"
+libraryDependencies += "com.timgroup" %% "iterata" % "0.1.4"
 
 initialCommands in console += "\nimport morsechaos._"
 
