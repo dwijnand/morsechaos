@@ -37,16 +37,16 @@ object MorseSeg {
 
   def maxDecode(w: String) = singleWordProb.dict.get(w).map(_.maxBy(_._2)._1) getOrElse w
 
-  def splitDecode(morse: String): Seq[String] = {
-    if (morse.length == 0) Vector("")
+  def splitDecode(morse: String): Iterator[String] = {
+    if (morse.length == 0) Iterator("")
     else {
       (1 to (4 min morse.length)).iterator.flatMap { i =>
         val (l, r) = morse splitAt i
         Morse decodeOpt l match {
           case Some(ch) => splitDecode(r) map (s => ch.toString + s)
-          case None     => Vector.empty
+          case None     => Iterator.empty
         }
-      }.toVector
+      }
     }
   }
 
