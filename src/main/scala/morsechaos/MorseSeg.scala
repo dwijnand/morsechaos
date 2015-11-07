@@ -37,8 +37,9 @@ object MorseSeg {
 
   def maxDecode(w: String) = singleWordProb.dict.get(w).map(_.maxBy(_._2)._1) getOrElse w
 
-  def resplit(english: String, leeway: Int = 0): Iterator[String] = {
+  def resplit(english: String, leeway0: Int = -1): Iterator[String] = {
     val len = english filter (_ != ' ') filter (_ != '\n') length
+    val leeway = if (leeway0 < 0) len / 8 + 1 else leeway0
     val range = len - leeway max 1 to len + leeway
 
     def loop(morse: String, len: Int): Iterator[String] = {
