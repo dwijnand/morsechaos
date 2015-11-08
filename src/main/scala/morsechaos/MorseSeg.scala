@@ -37,33 +37,67 @@ object MorseSeg {
 
   def maxDecode(w: String) = singleWordProb.dict.get(w).map(_.maxBy(_._2)._1) getOrElse w
 
-  def resplit(english: String, leeway0: Int = -1): Iterator[String] = {
-    val len = english filter (_ != ' ') filter (_ != '\n') length
-    val leeway = if (leeway0 < 0) len / 8 + 1 else leeway0
-    val range = len - leeway max 1 to len + leeway
+  // hello -> 2235
+  def resplit(english: String): Iterator[String] = {
+    def println(x: Any) = ()
+    val morse = encode(english)
+    println(s"$english => $morse")
+    val mlen = morse.length
+    val min = math rint (mlen / 2.7) toInt
+    val max = math rint (mlen / 2.3) toInt
+    val range = min to max
+    println(s"range: $range, english len: ${english filter (_ != ' ') filter (_ != '\n') length}")
 
-    def loop(morse: String, len: Int, ts: Int, es: Int): Iterator[String] = {
-      if (morse.length == 0) if (range contains len) Iterator("") else Iterator.empty
+    // ACCEPTED
+    // REJECTED
+    // TODO: Make tail recursive
+    def loop(morse: String, acc: List[Char], ts: Int, es: Int): Iterator[String] = {
+      val len = acc.length
+      val prefix = s"[$len]" + ("  " * len)
+      println(s"""$prefix Entered loop(morse = "$morse", acc = "${acc.reverse.mkString}")""")
+      if (morse.length == 0)
+        if (range contains len) {
+          println(s"$prefix ACCEPTED: morse.length == 0 & range $range contains len $len")
+          Iterator(acc.reverse.mkString)
+        } else {
+          println(s"$prefix REJECTED: morse.length == 0 & range $range doesn't contains len $len")
+          Iterator.empty
+        }
       else {
-        (1 to (4 min morse.length)).par.iterator flatMap { i =>
+        val lhs = morse.length.toDouble / 4
+        val rhs = range.end - len
+        if (lhs > rhs) {
+          println(s"$prefix REJECTED: morse.length ${morse.length} / 4 > (range.end ${range.end} - len $len) ($lhs > $rhs)")
+          Iterator.empty
+        }
+        else
+        // .par
+        (1 to (4 min morse.length)).iterator flatMap { i =>
           val (l, r) = morse splitAt i
+          println(s"""$prefix Split "$morse" into "$l" and "$r"""")
           Morse decodeOpt l match {
-            case Some('t') if ts == 2 => Iterator.empty
-            case Some('e') if es == 2 => Iterator.empty
+            case Some('t') if ts == 2 =>
+              println(s"$prefix REJECTED Too many ts")
+              Iterator.empty
+            case Some('e') if es == 2 =>
+              println(s"$prefix REJECTED Too many es")
+              Iterator.empty
             case Some(ch)             =>
               val (ts1, es1) = ch match {
                 case 't' => (ts + 1, 0)
                 case 'e' => (0, es + 1)
-                case _   => (0, 0)
+                case _ => (0, 0)
               }
-              loop(r, len + 1, ts1, es1) map (s => ch.toString + s)
-            case None                 => Iterator.empty
+              loop(r, ch :: acc, ts1, es1)
+            case None                 =>
+              println( s"""$prefix REJECTED No morse for "$l"""")
+              Iterator.empty
           }
         }
       }
     }
 
-    loop(encode(english), 0, 0, 0)
+    loop(morse, Nil, 0, 0)
   }
 
   def splitDecode(morse: String): Iterator[String] = {
