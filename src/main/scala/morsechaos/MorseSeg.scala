@@ -42,20 +42,28 @@ object MorseSeg {
     val leeway = if (leeway0 < 0) len / 8 + 1 else leeway0
     val range = len - leeway max 1 to len + leeway
 
-    def loop(morse: String, len: Int): Iterator[String] = {
+    def loop(morse: String, len: Int, ts: Int, es: Int): Iterator[String] = {
       if (morse.length == 0) if (range contains len) Iterator("") else Iterator.empty
       else {
-        (1 to (4 min morse.length)).iterator flatMap { i =>
+        (1 to (4 min morse.length)).par.iterator flatMap { i =>
           val (l, r) = morse splitAt i
           Morse decodeOpt l match {
-            case Some(ch) => loop(r, len + 1) map (s => ch.toString + s)
-            case None     => Vector.empty
+            case Some('t') if ts == 2 => Iterator.empty
+            case Some('e') if es == 2 => Iterator.empty
+            case Some(ch)             =>
+              val (ts1, es1) = ch match {
+                case 't' => (ts + 1, 0)
+                case 'e' => (0, es + 1)
+                case _   => (0, 0)
+              }
+              loop(r, len + 1, ts1, es1) map (s => ch.toString + s)
+            case None                 => Iterator.empty
           }
         }
       }
     }
 
-    loop(encode(english), 0)
+    loop(encode(english), 0, 0, 0)
   }
 
   def splitDecode(morse: String): Iterator[String] = {
