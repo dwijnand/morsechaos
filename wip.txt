@@ -15,7 +15,7 @@
  for example if there are three dashes your program could think that there are three times the letter t
  but this is wrong because in normal english is very strange to find three letters t together
  these kind of things reduces the number of combinations but there are still too many possibilities
- thus it is up to you work with di grams trigrams or tetra grams frequencies and you can solve this
+ the rest is up to you work with di grams trigrams or tetra grams frequencies and you can solve this
 
 
  automatically
@@ -27,8 +27,8 @@
  so i will tell you how i solved contact
  at first i thought it was binary encoded
  it is easy to think that each dot is a bit
- and if you find the method of reading you have in a line too many ways
- rates are spiral circles write every direction
+ and if you find the method of reading you have it
+ i tried too many ways radial spiral circles etc in every direction
  but nothing worked so i decided that it was not binary
  after analyzing other challenges
 
